@@ -1,0 +1,110 @@
+
+
+services:
+  # Laravel Producción
+  laravel-prod:
+    container_name: rally-back-prod
+    build:
+      context: ./rally-back
+      dockerfile: Dockerfile
+    image: laravel-app-prod
+    expose:
+      - "8000"
+    env_file:
+      - ./rally-back/.env
+    depends_on:
+      - mariadb
+    profiles: ["prod"]
+    networks:
+      - prod-network
+
+  # Laravel Desarrollo
+  laravel-dev:
+    container_name: rally-back-dev
+    user: root
+    build:
+      context: ./rally-back
+      dockerfile: Dockerfile.dev
+    image: laravel-app-dev
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./rally-back/.env
+    depends_on:
+      - mariadb
+    profiles: ["dev"]
+    networks:
+      - dev-network
+
+  # React Producción
+  react-prod:
+    container_name: rally-front-prod
+    build:
+      context: ./rally-front
+      dockerfile: Dockerfile
+    image: react-app-prod
+    expose:
+      - "8080"
+    profiles: ["prod"]
+    networks:
+      - prod-network
+
+  # React Desarrollo
+  react-dev:
+    container_name: rally-front-dev
+    build:
+      context: ./rally-front
+      dockerfile: Dockerfile.dev
+    image: react-app-dev
+    ports:
+      - "5173:5173"
+    develop:
+      watch:
+        - action: sync
+          path: ./rally-front
+          target: /app
+    profiles: ["dev"]
+    networks:
+      - dev-network
+
+  # MariaDB (compartida)
+  mariadb:
+    container_name: mariadb
+    image: mariadb:11
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: rally-fv2
+      MYSQL_USER: pepito01
+      MYSQL_PASSWORD: pepito01
+    volumes:
+      - mariadb_data_back:/var/lib/mysql
+      - ./mysql/my_custom.cnf:/etc/mysql/conf.d/my_custom.cnf:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - dev-network
+      - prod-network
+
+  # Adminer para DB
+  adminer:
+    container_name: adminer-rally
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mariadb
+    profiles: ["dev", "prod"]
+    networks:
+      - dev-network
+      - prod-network
+
+volumes:
+  mariadb_data_back:
+
+networks:
+  dev-network:
+    name: dev-network
+  prod-network:
+    name: prod-network

@@ -1,0 +1,18 @@
+.register-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form{
+    display: flex;
+    flex-direction: column;
+}
+
+fieldset{
+    display: flex;
+    flex-direction: column;
+    border:none;
+}
+.pssErrorBorder {
+    border: 2px solid red;
+  }

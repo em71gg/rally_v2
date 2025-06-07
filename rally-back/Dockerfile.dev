@@ -1,0 +1,65 @@
+
+# rally-back/Dockerfile.dev
+FROM php:8.2-cli
+
+# Instalación básica
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    netcat-openbsd \
+    && docker-php-ext-install pdo pdo_mysql
+
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Copia todo el código y .env
+COPY . .
+COPY .env .env
+
+# Instalación de dependencias PHP
+RUN composer install
+
+# Generación de APP_KEY
+RUN php artisan key:generate
+
+# Comando para desarrollo: espera a que mariadb esté disponible
+CMD sh -c "until nc -z mariadb 3306; do echo Waiting for DB...; sleep 1; done && php artisan serve --host=0.0.0.0 --port=8000"
+
+#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+
+##############################################
+##Config con chainguard
+##############################################
+
+
+#FROM cgr.dev/chainguard/laravel:latest-dev
+
+#WORKDIR /app
+
+# Copia el código fuente
+#COPY . .
+
+#USER root
+# Da permisos adecuados para evitar errores de Laravel en tiempo de build
+#RUN mkdir -p storage/logs bootstrap/cache && chmod -R 777 storage bootstrap/cache
+
+# Instala dependencias de Composer (modo desarrollo)
+#RUN composer install
+
+
+# Copia el script de permisos y lo hace ejecutable
+#COPY fix-permissions.sh /usr/local/bin/fix-permissions.sh
+#RUN chmod +x /usr/local/bin/fix-permissions.sh
+
+# Ejecuta el script de permisos y lanza el servidor de desarrollo
+#CMD ["/bin/sh", "-c", "fix-permissions.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+
+# Ejecuta el servidor de desarrollo directamente
+#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

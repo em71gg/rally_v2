@@ -1,0 +1,51 @@
+# Ignorar control de versiones
+.git
+.gitignore
+
+# Ignorar dependencias del host
+node_modules
+vendor
+
+# Archivos y carpetas del entorno de desarrollo
+.env.local
+.env.development
+.env.testing
+.env.backup
+docker-compose.override.yml
+
+# Archivos de entorno (solo si ya los pasas con `env_file`)
+#.env
+
+# Ignorar pruebas, solo en producción
+/tests/
+
+# Archivos de configuración locales
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+
+# Cache de Laravel
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Archivos generados
+storage/*
+!storage/app/
+!storage/framework/
+!storage/framework/cache
+!storage/framework/cache/data
+!storage/framework/sessions
+!storage/framework/testing
+!storage/framework/views
+!storage/logs
+!storage/.gitignore
+
+# Docker y CI/CD
+docker-compose*.yml
+Dockerfile*
+*.sh
+#!fix-permissions.sh
+
