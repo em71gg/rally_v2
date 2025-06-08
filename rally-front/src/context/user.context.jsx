@@ -54,9 +54,6 @@ function UserProviderWrapper(props) {
     }
   };
 
-
-
-
   const login = async (userData) => {
     try {
       // 1. Obtener el CSRF cookie

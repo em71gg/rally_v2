@@ -1,4 +1,4 @@
-import axios from "axios";
+import { getCsrf, api } from "../api/axiosInstance";
 import { createContext, useState } from "react";
 
 const PhotoContext = createContext(); //variable que aloja la función que crea el contexto
@@ -11,20 +11,15 @@ function PhotoProviderWrapper(props) {
         const formData = new FormData();
         formData.append('user_id', user_id);
         formData.append('nombre', nombre);
-        formData.append('image_file', image_file);
+        formData.append('uri_cover', image_file);
         try {
-            const response = await axios.post('/api/create-´photo', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true,
-            });
-
-            const fotoId = response.data?.data?.id;
-            if(!fotoId) throw new Error('No se devolvió el id de la foto.');
-            return fotoId
+            await getCsrf();//neceario si user autenticado?
+            const response = await api.post('/api/create-photo', formData);
+            return response.data.data.id;
+            //const fotoId = response.data?.data?.id;
+            
         }catch (error) {
-            console.error('Error al subir la foto:', error.response?.data || error.message);
+            console.error('Error al subir la foto:', error);
             throw error;
         }
     }; 
@@ -32,15 +27,13 @@ function PhotoProviderWrapper(props) {
     // Asociar una foto a un rally
     const registerPhoto = async ({ rally_id, foto_id }) => {
     try {
-      const response = await axios.post(
-        "/api/fotos/submit-to-rally",
+      await getCsrf();//neceario si user autenticado?
+      const response = await api.post(
+        "/api/submit-photo",
         {
           rally_id,
           foto_id,
         },
-        {
-          withCredentials: true,
-        }
       );
 
       return response.data;
@@ -52,20 +45,7 @@ function PhotoProviderWrapper(props) {
 
     
     const getPhoto = (index) => {
-       /* return axios
-        .get(`https://pokeapi.co/api/v2/pokemon/${index}`, {
-            withCredentials: false,
-        })
-        .then((response) => {
-            console.log(response.data);
-            return response.data;
-        })
-        .catch((error) => {
-            
-            console.error("Error al cargar los datos", error.message || error);
-           
-        });
-        */
+      
     };
     return (
         <PhotoContext.Provider value={{photos, setPhotos, getPhoto, uploadPhoto, registerPhoto}}>

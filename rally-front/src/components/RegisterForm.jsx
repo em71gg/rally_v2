@@ -120,15 +120,6 @@ function RegisterForm(props) {
             <option value="creador">Creador</option>
             <option value="participante">Participante</option>
           </select>
-
-          {/*
-          <input
-            type="text"
-            className="role"
-            id="role"
-            onChange={handleChange}
-          />
-          */}
         </fieldset>
         <fieldset className="">
           <label htmlFor="email">Email</label>

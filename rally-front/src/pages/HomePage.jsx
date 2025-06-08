@@ -14,6 +14,7 @@ function HomePage() {
   const { links } = useContext(HeaderContext);
   const { rallies, setRallies } = useContext(RallyContext);
   const now= new Date();
+  console.log('EStos son los rallies que están llegando: ', rallies);
 
   const greetings = "Bienvenido a Rallies Fotográficos";
 
@@ -46,9 +47,9 @@ function HomePage() {
     <>
       <HeaderComponent greetings={greetings} links={links} />
 
-      <h1>Mi front experimental</h1>
+      
       <h2 className="">
-        Practicando con pokemons, A ver ¿llegaremos al final? O no...Si!
+        Pagina de despliegue de rallies fotográficos.
       </h2>
        <section className="rallies">
         <h2 className="">Listado de rallies abiertos</h2>
@@ -64,17 +65,7 @@ function HomePage() {
         </ul>
         
       </section>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      {/* comentado photohome temporalmente
-      <PhotoHome />
       
-      */}
-      
-      <Link to="/rally" className="link">
-        Rally
-      </Link>
     </>
   );
 }

@@ -1,0 +1,17 @@
+main {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: repeat(2, 1fr);
+gap: 1rem;
+padding: 1rem;
+min-height: 100vh;
+}
+main > div {
+background-color: #fefefe;
+padding: 1rem;
+border-radius: 8px;
+border: 1px solid #eaeaf6;
+box-shadow: 2px 2px 8px rgba(234, 234, 246, 0.3); 
+text-align: center;
+
+}

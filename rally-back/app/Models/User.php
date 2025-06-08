@@ -49,4 +49,34 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    /**
+     * Elimina los roles y permisos de un usuario borrado
+     */
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            $user->roles()->detach(); // Limpia roles
+            $user->permissions()->detach(); // Limpia permisos directos
+        });
+    }
+
+    /**
+     * Un usuario puede crear muchos rallies, pero un rally sólo tiene un creador.
+     */
+    public function owns() {
+        return $this->hasMany(Rally::class);
+    }
+
+    /**
+     * Relación n:m entre rallies y participantes.
+     */
+    public function rallies() {
+        return $this->belongsToMany(Rally::class)->withTimestamps();//withTimestampos me rellena created y updated_at en la tabla pivote
+    }
+    /**
+     * Un usuario puede tener muchas fotos, pero una foto sólo tiene un usuario.
+     */
+    public function fotos() {
+        return $this->hasMany(Foto::class);
+    }
 }

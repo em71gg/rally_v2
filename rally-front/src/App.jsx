@@ -7,6 +7,7 @@ import ErrorPage from './pages/ErrorPage'
 import Login from './pages/Login'
 import UserPage from './pages/UserPage'
 import DashBoard from './pages/DashBoard'
+import RallyToBePage from './pages/RallyToBePage'
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
       <Route path='/login' element= { <Login />} />
       <Route path='/user/:id' element= { <UserPage /> } />
       <Route path='/dashboard' element= { <DashBoard /> } />
+      <Route path='/sign-rally/:id' element = {<RallyToBePage />} />
     </Routes>  
     )
 }

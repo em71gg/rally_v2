@@ -13,7 +13,7 @@ class Rally extends Model
     protected $fillable = [
         'category_id', 
         'propietario_id',
-        'uri_cover',
+        //'uri_cover',
         'nombre',
         'descripcion',
         'premio1',
@@ -23,6 +23,7 @@ class Rally extends Model
         'limite_votos',
         'fecha_inicio',
         'fecha_fin',
+        'validado',
     ];
 
      /**

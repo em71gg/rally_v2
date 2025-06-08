@@ -18,20 +18,7 @@ export const getCsrf = async () => {
   return axios.get("http://localhost:8001/sanctum/csrf-cookie",); // sin baseURL  
 };
 
-// Cliente sin prefijo api
-/* 
-export const auth = axios.create({
-  baseURL: "http://localhost:8001", // sin /api
-  withCredentials: true,
-  //withXSRFToken: true,
-  headers: {
-    //"X-Requested-With": "XMLHttpRequest",
-    Accept: "application/json",
-    //'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
-  },
-});
-*/
-// Cliente rutas api
+
 export const api = axios.create({
   baseURL: "http://localhost:8001",
   headers: {

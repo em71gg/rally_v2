@@ -17,8 +17,13 @@ function DateProviderWrapper(props) {
 
         return date.toLocaleDateString('es-ES', options).replace(',' , ' a las ');
     }
+
+    const formatDatetime = (datetime) => {
+        const date = new Date(datetime);
+        return date.toISOString().slice(0, 19).replace("T", " ");
+    };
     return (
-        <DateContext.Provider value={{formatDate}}>
+        <DateContext.Provider value={{formatDate, formatDatetime}}>
             {props.children}
         </DateContext.Provider>
     )
