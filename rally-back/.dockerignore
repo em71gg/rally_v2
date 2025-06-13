@@ -7,10 +7,10 @@ node_modules
 vendor
 
 # Archivos y carpetas del entorno de desarrollo
-#.env.local
-#.env.development
-#.env.testing
-#.env.backup
+.env.local
+.env.development
+.env.testing
+.env.backup
 docker-compose.override.yml
 
 # Archivos de entorno (solo si ya los pasas con `env_file`)
