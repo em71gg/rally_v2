@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import UserPage from './pages/UserPage'
 import DashBoard from './pages/DashBoard'
 import RallyToBePage from './pages/RallyToBePage'
+import RallyPage from './pages/RallyPage'
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
       <Route path='/user/:id' element= { <UserPage /> } />
       <Route path='/dashboard' element= { <DashBoard /> } />
       <Route path='/sign-rally/:id' element = {<RallyToBePage />} />
+      <Route path='/display-rally/:id' element= {<RallyPage/>} />
     </Routes>  
     )
 }

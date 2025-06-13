@@ -369,7 +369,7 @@ class ApiController extends Controller
         $rally = Rally::findOrFail($validated['rally_id']);
 
         // Obtener las fotos asociadas al rally, seleccionando solo los campos necesarios
-        $fotos = $rally->fotos()->get(['id', 'user_id', 'uri_imagen', 'validada']);
+        $fotos = $rally->fotos()->get(['id', 'user_id', 'uri_imagen', 'validada', 'nombre']);
 
         // Retornar los datos en formato JSON
         return response()->json([

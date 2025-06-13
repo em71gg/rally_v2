@@ -5,10 +5,11 @@ const PhotoContext = createContext(); //variable que aloja la función que crea 
 
 function PhotoProviderWrapper(props) {
   const [photos, setPhotos] = useState([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
+  const [photoError, setPhotoError] = useState(null);
 
   // Crar una foto en el modelo, subir una imagen a Supabase/Laravel y obtener el id de la foto.
   const uploadPhoto = async ({ user_id, nombre, image_file }) => {
-    
     console.log("typeof image_file:", typeof image_file);
     console.log("instanceof File:", image_file instanceof File);
     console.log("image_file:", image_file);
@@ -26,7 +27,7 @@ function PhotoProviderWrapper(props) {
       console.log(image_file instanceof File); // Debe ser true
 
       const response = await api.post("/api/createphoto", formData);
-      console.log('Respuesta de createPhoto: ',response);
+      console.log("Respuesta de createPhoto: ", response);
       return response.data.data.id;
       //const fotoId = response.data?.data?.id;
     } catch (error) {
@@ -54,19 +55,32 @@ function PhotoProviderWrapper(props) {
     }
   };
 
-  const getPhotosRally = async (rally_id) =>{
-    try{
-      const response = await api.post('/pi/photosRally', rally_id);
-      return {
-        success: true,
-        response: data,
-      };
-    }catch (error){}
-  }; 
+  const getPhotosRally = async ({rally_id}) => {
+    setLoadingPhotos(true);
+    try {
+      const response = await api.post("/api/photosRally", {rally_id});
+      setPhotos(response.data);
+      setPhotoError(null);
+    } catch (error) {
+      console.error("Error al obtener fotos:", error);
+      setPhotoError("No se pudieron cargar las fotos del rally.");
+    } finally {
+      setLoadingPhotos(false);
+    }
+  };
   const getPhoto = (index) => {};
   return (
     <PhotoContext.Provider
-      value={{ photos, setPhotos, getPhoto, uploadPhoto, registerPhoto }}
+      value={{
+        photos,
+        setPhotos,
+        loadingPhotos,
+        photoError,
+        getPhotosRally,
+        getPhoto,
+        uploadPhoto,
+        registerPhoto,
+      }}
     >
       {props.children}
     </PhotoContext.Provider>

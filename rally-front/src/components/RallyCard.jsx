@@ -13,7 +13,7 @@ function RallyCard(props) {
       <p className="">
         Abierto hasta: {formatDate(rally.fecha_fin)}.
       </p>
-      <Link to={`/rally/${rally.id}`}>Ir a {rally.nombre}</Link>
+      <Link to={`/display-rally/${rally.id}`}>Ir a {rally.nombre}</Link>
     </div>
   );
 }

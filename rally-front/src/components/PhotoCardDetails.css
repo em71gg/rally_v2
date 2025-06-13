@@ -1,0 +1,55 @@
+.card {
+ background-color: #fff;
+  border: dashed red 2px;
+  display: grid;
+  height: 80vh;
+  width: 80vw;
+  place-self: center;
+  max-width: 1280px;
+  grid-template-rows: 70% 30%;
+  grid-template-columns: 40px 50px auto 50px 40px;
+  gap: 1em;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.backwards {
+  grid-column: 1 / 2;
+  grid-row: 1/2;
+
+  align-self: end;
+}
+.photo-container {
+  grid-column: 2 / 5;
+  grid-row: 1 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.photo-container img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: scale-down;
+  display: block;
+}
+
+.fordwards {
+  grid-column: 5 / 6;
+  grid-row: 1/2;
+  align-self: end;
+}
+
+.vote-system {
+ grid-column: 2 / 5;
+  grid-row: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}

@@ -8,30 +8,34 @@ function RallyProviderWrapper(props) {
   const { formDate } = useContext(DateContext);
   const [rallies, setRallies] = useState([]);
   const [registered, setRegistered] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const getRalliesInfo = async () =>{
-    try{
-      const response = await api.get('/api/rallies');
+  const getRalliesInfo = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/api/rallies");
       setRallies(response.data);
-    }
-    catch(error){
+      setError(null);
+    } catch (error) {
+      setError("No se pudieron cargar los datos de lo rallies.");
       console.error("Error al obtener los rallies:", error);
+    } finally {
+      setLoading(false);
     }
-    
-    
-  }
+  };
 
   const registerParticipantOnRally = async (rallyId, userId) => {
-    try{
+    try {
       //await getCsrf();//neceario si user autenticado?
-      await api.post('/api/register-for-rally', {
+      await api.post("/api/register-for-rally", {
         rally_id: rallyId,
         user_id: userId,
       });
       console.log(`Usuario ${userId} registrado en el rally ${rallyId}`);
-      setRegistered(true); 
-      return {success:true}
-    }catch(error){
+      setRegistered(true);
+      return { success: true };
+    } catch (error) {
       if (error.response) {
         return {
           success: false,
@@ -44,17 +48,16 @@ function RallyProviderWrapper(props) {
         };
       }
     }
-    
+
     //setRegistered(!registered);
     //llamar a la funcion de registro
-   // console.log(`Usuario ${userId} registrado en el rally ${rallyId}`);
-    
+    // console.log(`Usuario ${userId} registrado en el rally ${rallyId}`);
   };
 
   const validateRally = async (rally_id) => {
-    try{
+    try {
       await getCsrf(); // Necesario para sesiones protegidas por Sanctum
-      const response=  await api.put('/api/validate-rally', {id: rally_id});
+      const response = await api.put("/api/validate-rally", { id: rally_id });
       console.log("Rally validado:", response.data);
 
       // Actualiza el rally en el estado local
@@ -64,42 +67,44 @@ function RallyProviderWrapper(props) {
         )
       );
       return { success: true };
-    }catch(error) {
+    } catch (error) {
       console.error("Error al validar rally:", error);
       return {
-      success: false,
-      error: error?.response?.data?.message || error.message,
-    };
+        success: false,
+        error: error?.response?.data?.message || error.message,
+      };
     }
   };
 
   const deleteRally = async (rally_id) => {
     try {
-      await getCsrf(); 
-      const response=  await api.put('/api/delete-rally', {id: rally_id});
+      await getCsrf();
+      const response = await api.put("/api/delete-rally", { id: rally_id });
       console.log("Rally eliminado:", response.data);
-      setRallies((prevRallies) => prevRallies.filter((rally) => rally.id !== rally_id));
+      setRallies((prevRallies) =>
+        prevRallies.filter((rally) => rally.id !== rally_id)
+      );
       return { success: true };
     } catch (error) {
       console.error("Error al validar rally:", error);
       return {
-      success: false,
-      error: error?.response?.data?.message || error.message,
+        success: false,
+        error: error?.response?.data?.message || error.message,
+      };
     }
-  }
-  }
+  };
 
-  const createRally = async (rallyData)=>{
-    try{
-      await getCsrf();//necesario si user autenticado?
+  const createRally = async (rallyData) => {
+    try {
+      await getCsrf(); //necesario si user autenticado?
       await api.post("/api/rally", rallyData);
 
       //Rescato la respuesta
       const newRally = response.data;
       //Actualizo Rallies
-      setRallies(prev => [...prev, newRally]);
-      return {success:true}
-    }catch(error){
+      setRallies((prev) => [...prev, newRally]);
+      return { success: true };
+    } catch (error) {
       if (error.response) {
         return {
           success: false,
@@ -128,7 +133,9 @@ function RallyProviderWrapper(props) {
         setRegistered,
         createRally,
         validateRally,
-        deleteRally
+        deleteRally,
+        loading,
+        error,
         //displayRallyInfoToParticipant,
       }}
     >
