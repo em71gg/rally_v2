@@ -10,7 +10,7 @@ class Foto extends Model
         'user_id',
         'uri_imagen',
         'nombre',
-        'validada',
+        //'validada',
     ];
 
     /**

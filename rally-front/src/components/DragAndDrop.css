@@ -1,11 +1,18 @@
+.photo-data{
+  display:flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 40vh;
+  /*min-height: 40vh;*/
   flex-direction: column;
   font-family: sans-serif;
+  gap: 1rem;
 }
 
 .dropzone {

@@ -4,23 +4,20 @@ import { UserContext } from "../context/user.context";
 import { PhotoContext } from "../context/photo.context";
 
 function DragAndDrop(props) {
-
-  useEffect(() =>{
+  useEffect(() => {
     //pendiente de lógica de carga de datos del rally_id del Numero de fotos5
   }, []);
   //const {rally_id, onSuccess } = props;
   //const {user} = useContext(UserContext);//de aqui sacamos user_id para el upload user.id
   //const {uploadPhoto, registerPhoto} = useContext(PhotoContext);
-  const {name, setName, file, setFile} = props;
+  const { name, setName, file, setFile } = props;
   //const [file, setFile] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef();
-  
 
   const setPhotoName = (event) => {
-    
-    setName(event.target.value); 
-  }
+    setName(event.target.value);
+  };
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -43,19 +40,24 @@ function DragAndDrop(props) {
     setFile(Array.from(selectedFile));
   };
 
-  
   const handleCancel = () => {
     setFile([]);
     inputRef.current.value = null;
   };
 
   return (
-   <section className="photo-data">
-    <p className="">Subir foto</p>
-   
+    <section className="photo-data">
+      <p className="">Subir foto</p>
       <div className="photodata">
-        <label htmlFor="photo-name" className="photo-name">Título de la foto</label>
-        <input type="text" className="photo-name" id="photo-name" onChange={setPhotoName}/>
+        <label htmlFor="photo-name" className="photo-name">
+          Título de la foto
+        </label>
+        <input
+          type="text"
+          className="photo-name"
+          id="photo-name"
+          onChange={setPhotoName}
+        />
       </div>
       <div className="container">
         {file.length > 0 ? (
@@ -66,7 +68,9 @@ function DragAndDrop(props) {
               ))}
             </ul>
             <div className="actions">
-              <button className="btn cancel" onClick={handleCancel}>Cancelar</button>
+              <button className="btn cancel" onClick={handleCancel}>
+                Cancelar
+              </button>
               {/*<button className="btn upload" onClick={handleUpload}>Subir</button>*/}
             </div>
           </div>
@@ -87,16 +91,14 @@ function DragAndDrop(props) {
               multiple
               onChange={handleFileChange}
             />
-            <button onClick={() => inputRef.current.click()}>Seleccionar archivo</button>
+            <button onClick={() => inputRef.current.click()}>
+              Seleccionar archivo
+            </button>
           </div>
         )}
       </div>
-      
-    
-   </section>
-    
+    </section>
   );
 }
 
 export default DragAndDrop;
-

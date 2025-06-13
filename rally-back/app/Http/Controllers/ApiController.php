@@ -8,7 +8,12 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 class ApiController extends Controller
 {
@@ -30,7 +35,7 @@ class ApiController extends Controller
             $request->validate([ //validaciones de datos entrantes
                 'category_id' => 'required|integer',
                 'propietario_id' => 'nullable|integer',
-                
+
                 'nombre' => 'required|string',
                 'descripcion' => 'required|string',
                 'premio1' => 'nullable|integer',
@@ -43,7 +48,7 @@ class ApiController extends Controller
             ]);
 
             //Subir imagen a s3 y obtener la url.
-        /*
+            /*
             if ($request->hasFile('uri_cover')) {
                 $file = $request->file('uri_cover');
                 $path = Storage::disk('s3')->put('covers', $file);
@@ -88,29 +93,12 @@ class ApiController extends Controller
     public function getRallies(): JsonResponse
     {
         try {
-            $rallies = Rally::withCount('fotos')
-            ->with([
+            $rallies = Rally::withCount('fotos') ->with([
                 'category:id,category',
                 'propietario:id,name,nickname',
-                'participantes:id', //Sólo para saber si los hay o contar cuántos.                      
-            ])
-                ->select(
-                    'id', 
-                    'nombre', 
-                    'validado',
-                    //'uri_cover', 
-                    'descripcion', 
-                    'fecha_inicio', 
-                    'fecha_fin', 
-                    'category_id', 
-                    'propietario_id', 
-                    'premio1',
-                    'premio2',
-                    'premio3',
-                    'limite_fotos',
-                    'limite_votos',
-                    )
-                ->get();
+                'participantes:id',  
+
+            ])->get();
 
             return response()->json($rallies, 200);
         } catch (Exception $e) {
@@ -118,7 +106,7 @@ class ApiController extends Controller
         }
     }
 
-    public function registerUserOnRally (Request $request):JsonResponse
+    public function registerUserOnRally(Request $request): JsonResponse
     {
         try {
             // Validar entrada
@@ -135,16 +123,15 @@ class ApiController extends Controller
             return response()->json([
                 'message' => 'Usuario registrado correctamente en el rally.',
             ], 200);
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error al registrar usuario en el rally.',
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
     }
 
-    
+
     /**
      * Valida un rally pasándole el ID por parámetro.
      */
@@ -192,6 +179,13 @@ class ApiController extends Controller
     /**
      * Crea una foto en el modelo y aloja el archivo físico en supabase
      */
+
+    /*
+    ##################################
+    #Con S3 y supabase
+    ##################################
+
+
     public function createPhoto(Request $request): JsonResponse
     {
         try{
@@ -199,32 +193,37 @@ class ApiController extends Controller
                 
                 'user_id' => 'required|integer',
                 'nombre' => 'required|string',
-                'uri_cover' => 'required|image|max:2048',
+                'uri_cover' => 'required|image|max:20048',
             ]);
-
+        
             //Subir imagen a s3 y obtener la url.
-
             if ($request->hasFile('uri_cover')) {
                 $file = $request->file('uri_cover');
                 $path = Storage::disk('s3')->put('photos', $file);
-
+                if(!$path){
+                    return response()->json(['Error' => 'Nose creo el archivo en supabase. No hay path']);
+                }
                 $url = Storage::url($path);
             } else {
                 return response()->json(['Error' => 'No se envió imagen, debe enviar una.'], 400);
             }
 
-            $photo = Foto::create([
+            if($url) {
+                $photo = Foto::create([
                 'nombre' => $request->input('nombre'),
-                'uri_imagen' => $url,
+                'uri_imagen' => $url,//'http://www.fake.url', //
                 'user_id' => $request->input('user_id'),
             ]);
-
+            
             return response()->json([
                 'message' => 'Foto alojada en le sistema.',
                 'data' => $photo,
-
-
             ]);
+            }
+            else{
+                return response()->json(['Error:' => 'La url n se ha generado']);
+            }           
+        
         }catch(Exception $e) {
              return response()->json([
                 'message' => 'Error al crear una foto.',
@@ -232,11 +231,77 @@ class ApiController extends Controller
             ], 500);
         }
     }
+     */
+    ########################################
+    #Con  API REST de Storage, usando Guzzle
+    ########################################
+
+
+    public function createPhoto(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required|integer',
+                'nombre' => 'required|string',
+                'uri_cover' => 'required|image|max:20048',
+            ]);
+
+            if (!$request->hasFile('uri_cover')) {
+                return response()->json(['Error' => 'No se envió imagen, debe enviar una.'], 400);
+            }
+
+            $file = $request->file('uri_cover');
+            $filename = uniqid() . '_' . $file->getClientOriginalName();
+
+            $bucket = env('SUPABASE_BUCKET');
+            $supabaseUrl = env('SUPABASE_URL');
+            $apiKey = env('SUPABASE_API_KEY');
+
+            // Construir URL para subir
+            $uploadUrl = "$supabaseUrl/storage/v1/object/$bucket/$filename";
+
+            // Subir archivo a Supabase Storage
+            $response = Http::withToken($apiKey)
+                ->attach(
+                    'file',
+                    file_get_contents($file->getRealPath()),
+                    $filename
+                )
+                ->post($uploadUrl);
+
+            if (!$response->successful()) {
+                return response()->json([
+                    'message' => 'Error al subir el archivo a Supabase.',
+                    'error' => $response->json()
+                ], 500);
+            }
+
+            // Construir URL pública
+            $publicUrl = "$supabaseUrl/storage/v1/object/public/$bucket/$filename";
+
+            $photo = Foto::create([
+                'nombre' => $request->input('nombre'),
+                'uri_imagen' => $publicUrl,
+                'user_id' => $request->input('user_id'),
+            ]);
+
+            return response()->json([
+                'message' => 'Foto alojada en Supabase correctamente.',
+                'data' => $photo,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al crear una foto.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     /**
      * Asocia una foto a un rally 
      */
-    public function submitPhotoRally(Request $request): JsonResponse
+    public function submitPhotoToRally(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'rally_id' => 'required|exists:rallies,id',
@@ -293,16 +358,18 @@ class ApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPhotosRally($id): JsonResponse
+    public function getPhotosRally(Request $request): JsonResponse
     {
 
-
+        $validated = $request ->validate([
+            'rally_id' => 'required|exists:rallies,id',
+        ]);
 
         // Buscar el rally solicitado
-        $rally = Rally::findOrFail($id);
+        $rally = Rally::findOrFail($validated['rally_id']);
 
         // Obtener las fotos asociadas al rally, seleccionando solo los campos necesarios
-        $fotos = $rally->fotos()->select('id', 'user_id', 'uri_imagen', 'validada')->get();
+        $fotos = $rally->fotos()->get(['id', 'user_id', 'uri_imagen', 'validada']);
 
         // Retornar los datos en formato JSON
         return response()->json([
@@ -316,10 +383,35 @@ class ApiController extends Controller
         $rally = Rally::findOrFail($rally_id);
 
         $fotos = $rally->fotos('id', 'user_id', 'uri_imagen', 'validada')->where('user_id', $user_id)->get();
-         return response()->json([
+        return response()->json([
             'rally_id' => $rally->id,
             'fotos' => $fotos,
         ], 200);
+    }
+
+
+
+    ###################################################################################
+    #Categorias 
+    ###################################################################################
+
+    public function getCategories(): JsonResponse
+    {
+        try{
+            $categories = Category::get();
+            return response()->json([
+                'message' => 'Foto alojada en Supabase correctamente.',
+                'data' => $categories,
+            ]);
+        }catch(Exception $e){
+             return response()->json([
+                'message' => 'Error al seleccionar las categorias.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+
 
     }
+
 }

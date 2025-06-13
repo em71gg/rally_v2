@@ -4,6 +4,35 @@
   padding: 2rem;
   text-align: center;
 }
+.section-container{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.component{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-self: center;
+  background-color: #fefefe;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #eaeaf6;
+  box-shadow: 2px 2px 8px rgba(234, 234, 246, 0.3); 
+}
+
+.rallies-list{
+  /*max-width: 400px;*/
+  
+}
+
+.rallies-list{
+  border:1px solid #eaeaf6;
+  padding: 1rem;
+}
+
 
 .logo {
   height: 6em;

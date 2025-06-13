@@ -45,7 +45,7 @@ function UserPage() {
         {user.name && <h2>Hola {user.name}</h2>}
         <section className="">
           <div className="">
-            <h2 className="">Listado de rallies inscritos</h2>
+            <h2 className="">Listado de rallies inscritos, quizas puedo quitarlo</h2>
 
           </div>
         </section>

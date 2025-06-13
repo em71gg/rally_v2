@@ -4,13 +4,17 @@ import { RallyContext } from "../context/rally.context";
 import { UserContext } from "../context/user.context";
 
 import { DateContext } from "../context/date.context";
+import { FormContext } from "../context/form.context";
 
 
 function RegisterRally(props) {
-  const { user } = props;
+  const { categories } = useContext(FormContext);
+  const { user, handleOpenRegister } = props;
   const {formatDatetime} = useContext(DateContext);
   const { createRally } = useContext(RallyContext);
   
+  console.log('Estas son las categorias',categories);
+  console.log(categories[0].id);
   const [successfullRegister, setSuccessfullRegister] = useState("");
   
   const [formData, setFormData] = useState({
@@ -39,7 +43,7 @@ function RegisterRally(props) {
       [id]: value,
     }));
   };
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     if (
@@ -83,6 +87,7 @@ function RegisterRally(props) {
       if (successfullRegister) {
         const timeout = setTimeout(() => {
           setSuccessfullRegister("");
+          handleOpenRegister();
         }, 3000);
         return () => clearTimeout(timeout);
       }
@@ -95,13 +100,13 @@ function RegisterRally(props) {
           <label htmlFor="category_id" className="role">
             Categoría
           </label>
-          <select id="category_id" onChange={handleChange}>
+          <select id="category_id" value={formData.category_id} onChange={handleChange}>
             <option value="">Seleccione una categoría</option>
-            <option value="1">Retrato</option>
-            <option value="6">Viajes</option>
-            <option value="7">Naturaleza</option>
-            <option value="8">Moda</option>
-            <option value="9">Actualidad</option>
+            {categories && categories.map((category)=>(
+              <option key={category.id} value={category.id}>
+                {category.category}
+              </option>
+            ))}
           </select>
         </fieldset>
         <fieldset className="">

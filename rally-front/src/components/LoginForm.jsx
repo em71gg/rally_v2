@@ -1,17 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import "./LoginForm.css";
 import { UserContext } from "../context/user.context";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm(props) {
  
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log("Full location:", location);
   const [failedRegister, setFailedRegister] = useState("");
   const {login, user} = useContext(UserContext); 
 
+  const from = location.state?.from?.pathname || null;
+  console.log("From path:", from);
+
   useEffect(() => {
+    
       if (user?.isLoggedIn) {
-        if(user.role == 'administrador'){
+        
+        if (from && from != '/login'){
+          navigate(from, {replace:true});
+        }
+        else if(user.role == 'administrador'){
           navigate(`/dashboard`)
         }else{
           navigate(`/user/${user.id}`);

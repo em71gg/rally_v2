@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import HeaderComponent from "../components/HeaderComponent";
 import { UserContext } from "../context/user.context";
 import { HeaderContext } from "../context/header.context";
@@ -9,32 +9,70 @@ import RallyCardToBe from "../components/RallyCardToBe";
 import RalliesToValidate from "../components/RalliesToValidate";
 import RalliesCanBeDeleted from "../components/RalliesCanBeDeleted";
 
-const validate = () =>{};
+//const validate = () =>{};
 
-function DashBoard() {
+function DashBoard(props) {
   const { user } = useContext(UserContext);
   const { links } = useContext(HeaderContext);
+  const [openRegisterRally, setOpenRegisterRally] = useState(false);
+  const [openValidateRally, setOpenValidateRally] = useState(false);
+  const [openDeleteRally, setOpenDeleteRally] = useState(false);
   const greetings = "Dashboard";
- 
+  const handleOpenRegister = () => {
+    setOpenRegisterRally(!openRegisterRally);
+  };
+  const handleOpenValidate = () => {
+    setOpenValidateRally(!openValidateRally);
+  };
+  const handleOpenDeleteRally = () => {
+    setOpenDeleteRally(!openDeleteRally);
+  }
 
-  
-  
+
   return (
     <>
       <HeaderComponent greetings={greetings} links={links} />
+      <h6>
+        Usuario: {user.name} id:{user.id}
+      </h6>
       <main className="">
         <div>
           <h3 className="">Alta Rally</h3>
-          <h2>{user.id}</h2>
-          <RegisterRally user={user} />
+          <button className="" onClick={handleOpenRegister}>
+            Registrar Nuevo Rally
+          </button>
+          {openRegisterRally && (
+            <div className="">
+              <RegisterRally
+                user={user}
+                handleOpenRegister={handleOpenRegister}
+              />
+            </div>
+          )}
         </div>
         <div>
           <h3 className="">Validar rallies</h3>
-          <RalliesToValidate />
+          <p className="">
+            Hay {/*Insertar la funcion que calcule esto*/} rallies por validar
+          </p>
+          <button className="" onClick={handleOpenValidate}>
+            Ver Rallies por Validar
+          </button>
+          {openValidateRally && (
+            <div className="">
+              <RalliesToValidate handleOpenValidate={openValidateRally}/>
+            </div>
+          )}
         </div>
         <div>
-          <h3 className="">Eliminar Rallies rallies</h3>
-          <RalliesCanBeDeleted />
+          <h3 className="">Eliminar Rallies</h3>
+          <button className="" onClick={handleOpenDeleteRally}>Ver Rallies Eliminables</button>
+          {openDeleteRally && (
+            <div className="">
+                <RalliesCanBeDeleted handleOpenDeleteRally={handleOpenDeleteRally}/>
+            </div>
+          )}
+          
         </div>
         <div>usuarios</div>
       </main>

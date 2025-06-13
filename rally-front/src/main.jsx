@@ -10,6 +10,7 @@ import { UserProviderWrapper } from "./context/user.context.jsx";
 import { DateProviderWrapper } from "./context/date.context.jsx";
 import { RallyProviderWrapper } from "./context/rally.context.jsx";
 import { PhotoProviderWrapper } from "./context/photo.context.jsx";
+import { FormProviderWrapper } from "./context/form.context.jsx";
 
 createRoot(document.getElementById("root")).render(
   //<StrictMode>
@@ -19,7 +20,9 @@ createRoot(document.getElementById("root")).render(
         <DateProviderWrapper>
           <RallyProviderWrapper>
             <PhotoProviderWrapper>
-              <App />
+              <FormProviderWrapper>
+                <App />
+              </FormProviderWrapper>
             </PhotoProviderWrapper>
           </RallyProviderWrapper>
         </DateProviderWrapper>

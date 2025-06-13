@@ -1,10 +1,11 @@
 main {
 display: grid;
 grid-template-columns: repeat(2, 1fr);
-grid-template-rows: repeat(2, 1fr);
+/*grid-template-rows: repeat(2, 1fr);*/
+grid-auto-rows: auto; /*Esto me permite que la fila del grid se adapte al contenido*/
 gap: 1rem;
 padding: 1rem;
-min-height: 100vh;
+/*min-height: 100vh;*/
 }
 main > div {
 background-color: #fefefe;

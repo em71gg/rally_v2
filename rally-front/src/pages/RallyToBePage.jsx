@@ -7,21 +7,20 @@ import HeaderComponent from "../components/HeaderComponent";
 import DisplayRallyInfoToParticipant from "../components/DisplayRallyInfoToParticipant";
 
 function RallyToBePage(props) {
-  
   const { user, setUser } = useContext(UserContext);
   const { id } = useParams();
-  const { rallies, registerParticipantOnRally, registered, setRegistered } = useContext(RallyContext);
+  const { rallies, registerParticipantOnRally, registered, setRegistered } =
+    useContext(RallyContext);
   const { links, greetings } = useContext(HeaderContext);
-  //limpia set registered pa ra que no haya error en la carga de la página 
-  useEffect(() =>{
+  //limpia set registered pa ra que no haya error en la carga de la página
+  useEffect(() => {
     return () => {
       setRegistered(false);
-    }
+    };
   }, []);
 
-  
   const actualRally = rallies.find((rally) => rally.id === parseInt(id)); //useParams siempre devuelve un string, por eso parseInt(id)
-  console.log("El Rally es :", actualRally, ' Elusuario es:', user.id);
+  console.log("El Rally es :", actualRally, " Elusuario es:", user.id);
   if (!actualRally) {
     console.log("No existe el rally");
     return <Navigate to={"/error"} />;
@@ -43,15 +42,16 @@ function RallyToBePage(props) {
           <h2 className="">
             Despliegue del rally con id {id} y nombre {actualRally.nombre}
           </h2>
-         
-          
-          
         </section>
         <section className="" id="container">
-          <DisplayRallyInfoToParticipant rally={actualRally}></DisplayRallyInfoToParticipant>
+          <DisplayRallyInfoToParticipant
+            rally={actualRally}
+          ></DisplayRallyInfoToParticipant>
         </section>
         <section className="">
-          <button onClick={() => registerParticipantOnRally(actualRally.id, user.id)}>
+          <button
+            onClick={() => registerParticipantOnRally(actualRally.id, user.id)}
+          >
             Registrarse
           </button>
           {registered && (
