@@ -1,12 +1,12 @@
 
 
-.container {
+.container-photos {
   margin: auto;
-  border: #2e2c2c solid 5px;
-  background: #e4dcdc;
+  /*border: #2e2c2c solid 5px;
+  background: #e4dcdc;*/
 }
 
-/* mak images fill their container*/
+
 img {
   max-width: 100%;
 }
@@ -19,19 +19,18 @@ img:hover {
 .img-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  grid-gap: 5px;
+ /* grid-gap: 2px;*/
 }
 
-/* Media Query for changing grid on bigger screens*/
-
-/* Bigger than Phones(tablet) */
+/* Media Query para pantallas grandes*/
+/*(tablet) */
 @media only screen and (min-width: 750px) {
   .img-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Bigger than Phones(laptop / desktop) */
+/* (laptop / desktop) */
 @media only screen and (min-width: 970px) {
   .img-grid {
     grid-template-columns: repeat(4, 1fr);

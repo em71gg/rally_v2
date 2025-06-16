@@ -1,15 +1,21 @@
-import React from 'react'
+import './PhotoCard.css';
 
 function PhotoCard(props) {
-    const { uri, selectPhotoUri, id, selectPhotoId } = props;
+    const { uri, onSelect, id, nombre } = props;
 
     const handleClick = () => {
-        if (selectPhotoUri) selectPhotoUri(uri);
+      
+      if ( onSelect) onSelect(uri, id);
+        /*if (selectPhotoUri) {selectPhotoUri(uri)}else{selectPhotoUri('')};
         if (selectPhotoId) selectPhotoId(id)
+        */
     };
   return (
-    <div onClick={() => handleClick(uri)}>
-        <img src={uri} alt="" className="" />
+    <div onClick={handleClick}>
+      <figure>
+    <img src={uri} alt={nombre} className="" loading='lazy'/>
+    <figcaption>{nombre}</figcaption>
+      </figure>
     </div>
   )
 }

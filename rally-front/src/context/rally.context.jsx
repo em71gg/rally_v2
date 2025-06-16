@@ -34,6 +34,8 @@ function RallyProviderWrapper(props) {
       });
       console.log(`Usuario ${userId} registrado en el rally ${rallyId}`);
       setRegistered(true);
+      await getRalliesInfo();
+
       return { success: true };
     } catch (error) {
       if (error.response) {
@@ -97,7 +99,7 @@ function RallyProviderWrapper(props) {
   const createRally = async (rallyData) => {
     try {
       await getCsrf(); //necesario si user autenticado?
-      await api.post("/api/rally", rallyData);
+      const response = await api.post("/api/rally", rallyData);
 
       //Rescato la respuesta
       const newRally = response.data;

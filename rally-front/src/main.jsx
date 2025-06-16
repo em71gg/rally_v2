@@ -11,6 +11,7 @@ import { DateProviderWrapper } from "./context/date.context.jsx";
 import { RallyProviderWrapper } from "./context/rally.context.jsx";
 import { PhotoProviderWrapper } from "./context/photo.context.jsx";
 import { FormProviderWrapper } from "./context/form.context.jsx";
+import { VoteProviderWrapper } from "./context/vote.context.jsx";
 
 createRoot(document.getElementById("root")).render(
   //<StrictMode>
@@ -21,7 +22,9 @@ createRoot(document.getElementById("root")).render(
           <RallyProviderWrapper>
             <PhotoProviderWrapper>
               <FormProviderWrapper>
-                <App />
+                <VoteProviderWrapper>
+                  <App />
+                </VoteProviderWrapper>
               </FormProviderWrapper>
             </PhotoProviderWrapper>
           </RallyProviderWrapper>

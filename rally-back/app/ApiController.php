@@ -478,37 +478,12 @@ class ApiController extends Controller
         }
     }
 
-    public function deleteVote(Request $request):JsonResponse
+    public function getRallyResults($rally_id): JsonResponse
     {
-        try{
-            $validated = $request->validate(['id' => 'required|exists:votos,id']);
-            $voteToDestroy = Voto::find($validated['id']);
-            if(!$voteToDestroy) {
-                return response()->json([
-                    'message' => 'Voto no encontrado.',
-                ], 404);
-            } 
-            $voteToDestroy->delete();
-
-            return response()->json([
-                'message' => 'Voto eliminado.'
-            ], 200);
-        }catch (Exception $e){
-            return response()->json([
-                'message' => 'Error al eliminar el voto.',
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function getRallyResults(Request $request): JsonResponse
-    {
-
-
+        
         try {
-            $validated = $request->validate(['rally_id' => 'required|exists:rallies,id']);
             $resultados = Resultado::with('foto')
-                ->where('rally_id', $validated['rally_id'])
+                ->where('rally_id', $rally_id)
                 ->orderBy('posicion') // orden por posición ascendente
                 ->get(['foto_id', 'puntuacion', 'posicion']); // columnas deseadas
 
@@ -533,7 +508,7 @@ class ApiController extends Controller
         try {
             $votos = Voto::with('foto')
                 ->where('rally_id', $validated['rally_id'])
-                ->where('ip', $validated['ip'])
+                ->where('ip',$validated['ip'])
                 ->get();
             return response()->json([
                 'message' => 'Votaciones del usuario.',

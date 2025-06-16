@@ -6,7 +6,7 @@ import PhotoCard from "./PhotoCard";
 function PhotoPool(props) {
   const { getPhotosRally, photos, loadingPhotos, photoError } =
     useContext(PhotoContext);
-  const { id, handlePhotoId} = props;
+  const { id, onPhotoSelect} = props;
 
   useEffect(() => {
     getPhotosRally({ rally_id: id });
@@ -15,17 +15,19 @@ function PhotoPool(props) {
   if (photoError) return <p>{photoError}</p>;
   
     console.log("Esto es lo de photos", photos);
+
   const photosToDysplay = Array.isArray(photos.fotos)
-  ? photos.fotos.map((photo) =>{
+  ? photos.fotos.map((photo, index) =>{
     return (
       <li className="img" key={photo.id}>
       <PhotoCard 
       uri={photo.uri_imagen}
-      selectPhotoUri={props.selectPhotoUri}
+     
       id={photo.id}
-      selectPhotoId={props.handlePhotoId}
+      nombre={photo.nombre}
+      onSelect={() => onPhotoSelect(index)}
        />
-      {/*<img src={photo.uri_imagen} alt="" className="" />*/}
+      
     </li>
     )
   }) : [];
@@ -33,7 +35,7 @@ function PhotoPool(props) {
   return (
     <div>
       <h2 className="">PhotoPool del rally con id {id}.</h2>
-      <div className="container">
+      <div className="container-photos">
        <ul className='img-grid'>{photosToDysplay}</ul>
       </div>
       

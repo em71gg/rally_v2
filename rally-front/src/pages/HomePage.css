@@ -4,11 +4,18 @@
   padding: 2rem;
   text-align: center;
 }
-.section-container{
+.sections-container{
   display:flex;
   flex-direction: column;
+  align-self: center;
   align-items: center;
   flex-wrap: wrap;
+}
+.section-contain{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .component{
   display: flex;

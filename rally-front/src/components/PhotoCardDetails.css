@@ -1,6 +1,6 @@
 .card {
- background-color: #fff;
-  border: dashed red 2px;
+ background-color: #ffffff;
+ /* border: dashed red 2px;*/
   display: grid;
   height: 80vh;
   width: 80vw;
@@ -15,8 +15,8 @@
 .backwards {
   grid-column: 1 / 2;
   grid-row: 1/2;
-
-  align-self: end;
+justify-self: start;
+  align-self:self-end;
 }
 .photo-container {
   grid-column: 2 / 5;
@@ -24,13 +24,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  height: 50vh;
+  width: auto;
   overflow: hidden;
 }
 
 .photo-container img {
-  max-height: 100%;
+  max-height: 50vh;
   max-width: 100%;
   width: auto;
   height: auto;
@@ -50,6 +50,45 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  height: 20vh;
+  width: auto;
+}
+
+.arrow {
+  cursor: pointer;
+  color:black;
+  transition: 0.3s;
+}
+.arrow.hidden {
+  color: transparent; 
+  cursor: default;
+}
+
+.translucent{
+  
+  background:rgba(255,255,255,.08);border:2px solid transparent;
+  box-shadow:0 0 0 2px rgba(255,255,255,.6),0 16px 32px rgba(0,0,0,.12);
+  /*backdrop-filter:url(#frosted);-webkit-backdrop-filter:url(#frosted);*/
+  display:grid;place-items:center;cursor:pointer;outline:0;
+}
+
+.translucent {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.translucent:hover {
+  border-color: transparent;
+  backdrop-filter: blur(3px);
+}
+
+.translucent:focus,
+.translucent:focus-visible {
+  outline: 4px whitesmoke ;
 }

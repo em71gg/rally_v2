@@ -53,7 +53,7 @@ function DashBoard(props) {
         <div>
           <h3 className="">Validar rallies</h3>
           <p className="">
-            Hay {/*Insertar la funcion que calcule esto*/} rallies por validar
+            Hay rallies por validar
           </p>
           <button className="" onClick={handleOpenValidate}>
             Ver Rallies por Validar

@@ -24,12 +24,12 @@ Route::middleware(['auth:sanctum', 'role:administrador'])->put('validate-rally',
 Route::middleware(['auth:sanctum', 'role:administrador'])->put('delete-rally', [ApiController::class, 'deleteRally']);
 
 
-//Route::post('rally' , [ApiController::class, 'createRally']);
+
 Route::get('categories', [ApiController::class, 'getCategories']);
 Route::get('rallies', [ApiController::class, 'getRallies']);
 Route::get('user-rallies', [ApiController::class, 'getUserRallies']);
-Route::post('photosRally', [ApiController::class, 'getPhotosRally']);//el front mandará un post
-//Route::post('createphoto', [ApiController::class, 'createPhoto']);
-//Route::post('submit-photo', [ApiController::class, 'submitPhotoToRally']);
-//Route::post('remove-photo', [ApiController::class, 'removePhotoToRally']);
-//Route::post('register-for-rally', [ApiController::class, 'registerUserOnRally']);
+Route::post('photosRally', [ApiController::class, 'getPhotosRally']);
+Route::post('vote', [ApiController::class, 'vote']);
+Route::get('results', [ApiController::class, 'getRallyResults']);
+Route::get('uservotes', [ApiController::class, 'getUserVotes']);
+Route::delete('deleteVote', [ApiController::class, 'deleteVote']);

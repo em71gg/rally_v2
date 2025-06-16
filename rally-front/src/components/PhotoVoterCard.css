@@ -1,0 +1,21 @@
+.voter-card{
+   display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 20vw;
+    align-items: center;
+}
+.figure{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.votado{
+    align-items: start;
+}
+
+.voted-data{
+ text-align: left;
+
+}

@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('resultados', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->smallInteger('posicion');
+            $table->integer('puntuacion')->default(0);
+            $table->smallInteger('posicion')->nullable();
             $table->unsignedBigInteger('rally_id');
             $table->unsignedBigInteger('foto_id');
             $table->foreign('rally_id')->references('id')->on('rallies');

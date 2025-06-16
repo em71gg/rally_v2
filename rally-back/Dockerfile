@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/laravel:latest
+FROM php:8.2-cli
 
 WORKDIR /app
 
