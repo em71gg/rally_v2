@@ -25,12 +25,12 @@ function RallyToBePage(props) {
     console.log("No existe el rally");
     return <Navigate to={"/error"} />;
   }
-
+  /*
   if (!user.isLoggedIn) return <Navigate to={"/login"} />;
   console.log(
     `El valor de isLoggedin es: ${user.isLoggedIn}, y el de name: ${user.name}`
   );
-
+  */
   return (
     <>
       <HeaderComponent greetings={greetings} links={links} />
